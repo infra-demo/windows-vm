@@ -89,7 +89,7 @@ def getCrNo(InfraChangeID,token,url):
     url=url+"?q='Infrastructure Change ID' = \""+InfraChangeID+"\"&fields=values(Request ID)"
     #url=url+"?q=%27Infrastructure%20Change%20ID%27%20%3D%20%22"+InfraChangeID+"%22"
     #print(url)
-    resp=requests.get(url,headers=headers).json()
+    resp=requests.get(url,headers=headers)
     resp=resp.content.decode('utf-8')
     resp=json.loads(resp)
     # print(resp['entries'][0]['values']['Request ID'])
