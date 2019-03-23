@@ -91,7 +91,7 @@ def getCrNo(InfraChangeID,token,url):
     #print(url)
     resp=requests.get(url,headers=headers).json()
     resp=resp.content.decode('utf-8')
-    resp=json.loads(resp)
+    #resp=json.loads(resp)
     # print(resp['entries'][0]['values']['Request ID'])
     return resp['entries'][0]['values']['Request ID']
 
@@ -137,8 +137,8 @@ def getReconID(token,url):
     url=url+"?q='Name' = \""+data['VM_Name']['value']+"\"&fields=values(Reconciliation Identity)"
     print('recon-url',url)
     resp=requests.get(url,headers=headers).json()
-    resp=resp.text
-    resp=json.loads(resp)
+   # resp=resp.text
+   # resp=json.loads(resp)
     return resp['entries'][0]['values']['Reconciliation Identity']
 
 
