@@ -62,6 +62,8 @@ def updateCMDB(data,token,url):
         'Authorization':'AR-JWT '+token
     }
     resp = requests.post(url,data=data,headers=headers)
+    print('status')
+    print(resp.status_code)
     return resp
 
 def getDateTime():
@@ -124,7 +126,7 @@ def closeCR(crNo,url,token,data):
         'Authorization':'AR-JWT '+token
     }
     url=url+crNo
-    print(url)
+    # print(url)
     resp = requests.put(url,data=data,headers=headers)
     return resp
 
@@ -135,10 +137,12 @@ def getReconID(token,url):
         'Authorization':'AR-JWT '+token
     }
     url=url+"?q='Name' = \""+data['VM_Name']['value']+"\"&fields=values(Reconciliation Identity)"
-    print('recon-url',url)
-    resp=requests.get(url,headers=headers)
-    resp=resp.content.decode('utf-8')
-    resp=json.loads(resp)
+    # print('recon-url',url)
+    resp=requests.get(url,headers=headers).json()
+    #resp=resp.text
+  #  resp=json.loads(resp)
+    print('recon Generated...\n')
+
     return resp['entries'][0]['values']['Reconciliation Identity']
 
 
@@ -173,6 +177,7 @@ def getCMDB_BOJson(recon_Id):
     res['values']['AssetInstanceId']=recon_Id
 
     res = json.dumps(res)
+    print('Get Cmdb json object..\n')
     return res
 
 
@@ -203,10 +208,11 @@ try:
 
 
     if status==204:
+
         reconID=getReconID(token,cmdbUrl)
         data=getCMDB_BOJson(reconID)
         CMDBresp=updateCMDB(data,token,boUrl)
-        if CMDBresp.status_code==200 or CMDBresp.status_code==204:
+        if CMDBresp.status_code==200 or CMDBresp.status_code==204 or CMDBresp.status_code==201:
             print("CMDB Updated Successfully....\n")
             print('Attempting to get Infrastructure Change ID...')
             id=getInfraChangeID()
